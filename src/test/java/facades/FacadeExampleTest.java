@@ -1,5 +1,7 @@
 package facades;
 
+import entities.Role;
+import entities.User;
 import utils.EMF_Creator;
 import entities.RenameMe;
 import javax.persistence.EntityManager;
@@ -56,8 +58,16 @@ public class FacadeExampleTest {
 
     // TODO: Delete or change this method 
     @Test
-    public void testAFacadeMethod() {
-        assertEquals(2, facade.getRenameMeCount(), "Expects two rows in the database");
+    public void testCreateUser() {
+        UserFacade userFacade = UserFacade.getUserFacade(emf);
+        User actual = userFacade.createUser("thias", "thias123");
+        User expected = new User("thias", "thias123");
+        Role userRole = new Role("user");
+        expected.addRole(userRole);
+        assertEquals(expected.getUserName(), actual.getUserName());
+        //TODO: Kan man teste password når de er salty?
+        //assertEquals(expected.verifyPassword("thias123"), actual.verifyPassword(actual.getUserPass()));
+        assertEquals(expected.getRolesAsStrings(), actual.getRolesAsStrings());
     }
 
 }

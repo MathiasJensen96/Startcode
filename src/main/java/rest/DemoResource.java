@@ -1,19 +1,17 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import entities.User;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+
+import facades.UserFacade;
 import utils.EMF_Creator;
 
 /**
@@ -23,6 +21,9 @@ import utils.EMF_Creator;
 public class DemoResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final UserFacade userFacade = UserFacade.getUserFacade(EMF);
+
     @Context
     private UriInfo context;
 
@@ -67,5 +68,15 @@ public class DemoResource {
     public String getFromAdmin() {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
+    }
+
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createUser(String user) {
+        User u1 = gson.fromJson(user, User.class);
+        userFacade.createUser(u1.getUserName(), u1.getUserPass());
+        return "{\"msg\": \"Welcome: " + u1.getUserName() + "\"}";
     }
 }

@@ -1,8 +1,10 @@
 package rest;
 
+import com.google.gson.Gson;
 import entities.User;
 import entities.Role;
 
+import facades.UserFacade;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
@@ -31,6 +33,7 @@ public class LoginEndpointTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    private static Gson gson;
     
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -105,6 +108,20 @@ public class LoginEndpointTest {
                 .extract().path("token");
         //System.out.println("TOKEN ---> " + securityToken);
     }
+
+//    TODO: Spørg Tobias
+//    @Test
+//    public void createTest(String user) {
+//
+//        given()
+//                .contentType("application/json")
+//                .accept(ContentType.JSON)
+//                .header("x-access-token", securityToken)
+//                .when()
+//                .get("/info/user").then()
+//                .statusCode(200)
+//                .body("msg", equalTo("Welcome: " + user));
+//    }
 
     private void logOut() {
         securityToken = null;
