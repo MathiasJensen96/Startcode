@@ -1,14 +1,14 @@
 package dtos;
 
-public class GendorizeDTO {
+public class GenderizeDTO {
     private String name;
     private String gender;
     private String probability;
 
-    public GendorizeDTO() {
+    public GenderizeDTO() {
     }
 
-    public GendorizeDTO(String name, String gender, String probability) {
+    public GenderizeDTO(String name, String gender, String probability) {
         this.name = name;
         this.gender = gender;
         this.probability = probability;

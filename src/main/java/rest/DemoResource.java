@@ -1,9 +1,17 @@
 package rest;
 
+import Fetcher.UrlFetcher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.BoredDTO;
+import dtos.CatDTO;
+import dtos.DogDTO;
+import dtos.OurDTO;
 import entities.User;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,6 +21,7 @@ import javax.ws.rs.core.*;
 
 import facades.UserFacade;
 import utils.EMF_Creator;
+import utils.HttpUtils;
 
 /**
  * @author lam@cphbusiness.dk
@@ -78,5 +87,21 @@ public class DemoResource {
         User u1 = gson.fromJson(user, User.class);
         userFacade.createUser(u1.getUserName(), u1.getUserPass());
         return "{\"msg\": \"Welcome: " + u1.getUserName() + "\"}";
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getUrls() throws IOException, ExecutionException, InterruptedException {
+        Gson gson = new Gson();
+        String bored = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
+        BoredDTO boredDTO = gson.fromJson(bored, BoredDTO.class);
+        String cat = HttpUtils.fetchData("https://catfact.ninja/fact");
+        CatDTO catDTO = gson.fromJson(cat, CatDTO.class);
+        String dog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
+        DogDTO dogDTO = gson.fromJson(dog, DogDTO.class);
+
+        OurDTO dataFeched = UrlFetcher.runParrallel();
+        String combinedJSON = gson.toJson(dataFeched);
+        return combinedJSON;
     }
 }
