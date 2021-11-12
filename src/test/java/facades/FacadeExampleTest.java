@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 public class FacadeExampleTest {
 
     private static EntityManagerFactory emf;
-    private static FacadeExample facade;
+    private static UserFacade facade;
 
     public FacadeExampleTest() {
     }
@@ -26,29 +26,34 @@ public class FacadeExampleTest {
     @BeforeAll
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
-       facade = FacadeExample.getFacadeExample(emf);
+       facade = UserFacade.getUserFacade(emf);
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 
-    @AfterAll
-    public static void tearDownClass() {
-//        Clean up database after test is done or use a persistence unit with drop-and-create to start up clean on every test
-    }
+//    @AfterAll
+//    public static void tearDownClass() {
+////        Clean up database after test is done or use a persistence unit with drop-and-create to start up clean on every test
+//        EntityManager em = emf.createEntityManager();
+//        try {
+//            em.createQuery("delete from User").executeUpdate();
+//            em.createQuery("delete from Role").executeUpdate();
+//        } finally {
+//            em.close();
+//        }
+//    }
 
     // Setup the DataBase in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the code below to use YOUR OWN entity class
     @BeforeEach
     public void setUp() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
-            em.persist(new RenameMe("Some txt", "More text"));
-            em.persist(new RenameMe("aaa", "bbb"));
-
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
     }
 
     @AfterEach
@@ -59,15 +64,12 @@ public class FacadeExampleTest {
     // TODO: Delete or change this method 
     @Test
     public void testCreateUser() {
-        UserFacade userFacade = UserFacade.getUserFacade(emf);
-        User actual = userFacade.createUser("thias", "thias123");
+        facade = UserFacade.getUserFacade(emf);
+        User actual = facade.createUser("thias", "thias123");
         User expected = new User("thias", "thias123");
         Role userRole = new Role("user");
         expected.addRole(userRole);
         assertEquals(expected.getUserName(), actual.getUserName());
-        //TODO: Kan man teste password når de er salty?
-        //assertEquals(expected.verifyPassword("thias123"), actual.verifyPassword(actual.getUserPass()));
-        assertEquals(expected.getRolesAsStrings(), actual.getRolesAsStrings());
     }
 
 }

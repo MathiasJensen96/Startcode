@@ -79,14 +79,6 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getUrls() throws IOException, ExecutionException, InterruptedException {
-        Gson gson = new Gson();
-        String bored = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
-        BoredDTO boredDTO = gson.fromJson(bored, BoredDTO.class);
-        String cat = HttpUtils.fetchData("https://catfact.ninja/fact");
-        CatDTO catDTO = gson.fromJson(cat, CatDTO.class);
-        String dog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
-        DogDTO dogDTO = gson.fromJson(dog, DogDTO.class);
-
         OurDTO dataFeched = UrlFetcher.runParrallel();
         String combinedJSON = gson.toJson(dataFeched);
         return combinedJSON;

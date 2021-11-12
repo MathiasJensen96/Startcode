@@ -57,7 +57,7 @@ public class LoginEndpointTest {
     public static void closeTestServer() {
         //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
-        
+
         httpServer.shutdownNow();
     }
 
@@ -109,37 +109,13 @@ public class LoginEndpointTest {
         //System.out.println("TOKEN ---> " + securityToken);
     }
 
-//    TODO: Spørg Tobias
-//    @Test
-//    public void createTest(String user) {
-//
-//        given()
-//                .contentType("application/json")
-//                .accept(ContentType.JSON)
-//                .header("x-access-token", securityToken)
-//                .when()
-//                .get("/info/user").then()
-//                .statusCode(200)
-//                .body("msg", equalTo("Welcome: " + user));
-//    }
-
     private void logOut() {
         securityToken = null;
     }
 
     @Test
     public void serverIsRunning() {
-        given().when().get("/info").then().statusCode(200);
-    }
-
-    @Test
-    public void testRestNoAuthenticationRequired() {
-        given()
-                .contentType("application/json")
-                .when()
-                .get("/info/").then()
-                .statusCode(200)
-                .body("msg", equalTo("Hello anonymous"));
+        given().when().get("/info/all").then().statusCode(200);
     }
 
     @Test
