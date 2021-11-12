@@ -1,61 +1,93 @@
 package dtos;
 
+import java.util.ArrayList;
+
 public class OurDTO {
-    private String joke1;
-    private String joke2;
-    private String joke3;
-    private String joke4;
-    private String joke5;
+    private String activity;
+    private String type;
+    private String fact;
+    private String message;
+    private String name;
+    private String gender;
+    private String probability;
+    private ArrayList<String> results;
 
 
     public OurDTO() {
     }
 
     public OurDTO(BoredDTO boredDTO, CatDTO catDTO, DogDTO dogDTO, GenderizeDTO genderizeDTO, RandomUserDTO randomUserDTO) {
-        this.joke1 = boredDTO.getActivity();
-        this.joke2 = catDTO.getFact();
-        this.joke3 = dogDTO.getMessage();
-        this.joke4 = genderizeDTO.getGender();
-        this.joke5 = randomUserDTO.getGender();
+        this.activity = boredDTO.getActivity();
+        this.type = boredDTO.getType();
+        this.fact = catDTO.getFact();
+        this.message = dogDTO.getMessage();
+        this.name = genderizeDTO.getName();
+        this.gender = genderizeDTO.getGender();
+        this.probability = genderizeDTO.getProbability();
+        this.results = randomUserDTO.getResults();
     }
 
-    public String getJoke1() {
-        return joke1;
+    public String getActivity() {
+        return activity;
     }
 
-    public void setJoke1(String joke1) {
-        this.joke1 = joke1;
+    public void setActivity(String activity) {
+        this.activity = activity;
     }
 
-    public String getJoke2() {
-        return joke2;
+    public String getType() {
+        return type;
     }
 
-    public void setJoke2(String joke2) {
-        this.joke2 = joke2;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getJoke3() {
-        return joke3;
+    public String getFact() {
+        return fact;
     }
 
-    public void setJoke3(String joke3) {
-        this.joke3 = joke3;
+    public void setFact(String fact) {
+        this.fact = fact;
     }
 
-    public String getJoke4() {
-        return joke4;
+    public String getMessage() {
+        return message;
     }
 
-    public void setJoke4(String joke4) {
-        this.joke4 = joke4;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getJoke5() {
-        return joke5;
+    public String getName() {
+        return name;
     }
 
-    public void setJoke5(String joke5) {
-        this.joke5 = joke5;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getProbability() {
+        return probability;
+    }
+
+    public void setProbability(String probability) {
+        this.probability = probability;
+    }
+
+    public ArrayList<String> getResults() {
+        return results;
+    }
+
+    public void setResults(ArrayList<String> results) {
+        this.results = results;
     }
 }

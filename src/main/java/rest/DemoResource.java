@@ -26,9 +26,9 @@ import utils.HttpUtils;
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("info")
+@Path("/info")
 public class DemoResource {
-    
+
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final UserFacade userFacade = UserFacade.getUserFacade(EMF);
@@ -50,15 +50,8 @@ public class DemoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
     public String allUsers() {
-
-        EntityManager em = EMF.createEntityManager();
-        try {
-            TypedQuery<User> query = em.createQuery ("select u from User u",entities.User.class);
-            List<User> users = query.getResultList();
-            return "[" + users.size() + "]";
-        } finally {
-            em.close();
-        }
+        //return userFacade.getAllUsers();
+        return "Hello";
     }
 
     @GET

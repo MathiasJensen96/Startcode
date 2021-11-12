@@ -1,30 +1,22 @@
 package dtos;
 
+import java.util.ArrayList;
+
 public class RandomUserDTO {
-    private String gender;
-    private String name;
+    private ArrayList<String> results = new ArrayList();
 
     public RandomUserDTO() {
     }
 
-    public RandomUserDTO(String gender, String name) {
-        this.gender = gender;
-        this.name = name;
+    public RandomUserDTO(ArrayList<String> results) {
+        this.results = results;
     }
 
-    public String getGender() {
-        return gender;
+    public ArrayList<String> getResults() {
+        return results;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setResults(ArrayList<String> results) {
+        this.results = results;
     }
 }

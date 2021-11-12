@@ -2,9 +2,15 @@ package facades;
 
 import entities.Role;
 import entities.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
 import security.errorhandling.AuthenticationException;
+
+import java.util.List;
 
 /**
  * @author lam@cphbusiness.dk
@@ -18,7 +24,6 @@ public class UserFacade {
     }
 
     /**
-     *
      * @param _emf
      * @return the instance of this facade.
      */
@@ -54,5 +59,19 @@ public class UserFacade {
         em.persist(user);
         em.getTransaction().commit();
         return user;
+    }
+
+    public String getAllUsers() {
+
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<User> query = em.createQuery("select u from User u", entities.User.class);
+            List<User> users = query.getResultList();
+            return "[" + users.size() + "]";
+
+        } finally {
+            em.close();
+        }
+
     }
 }
