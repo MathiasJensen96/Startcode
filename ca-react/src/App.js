@@ -1,10 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import "./style2.css";
+import Home from './components/Home';
 import Bored from "./components/Bored";
 import Cat from './components/Cat';
 import Dog from './components/Dog';
 import Genderize from './components/Genderize';
+import facade from './facade';
 import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -29,9 +31,15 @@ export default function BasicExample() {
   const [type, setType] = useState("");
   const [fact, setFact] = useState("");
   const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [probability, setProbability] = useState("");
+
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('All is good ... so far');
+
+  const logout = () => {
+    facade.logout();
+    setLoggedIn(false);
+    setErrorMessage('Logged out.')
+  };
   
 
   useEffect( () => {
@@ -52,11 +60,8 @@ useEffect( () => {
   .then(data => setMessage(data.message))
 },[])
 
-useEffect( () => {
-  fetch(`https://api.genderize.io/?name=${name}`)
-  .then(res => res.json())
-  .then(data => (setName(data.name), setGender(data.gender), setProbability(data.probability)))
-},[])
+
+
 
 
   return (
@@ -64,10 +69,13 @@ useEffect( () => {
       <div>
         <ul className="header">
           <li>
-            <NavLink exact activeClassName="selected" to="/">Bored</NavLink>
+            <NavLink exact activeClassName="selected" to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink exaxt activeClassName="selected" to="/cat">Cat</NavLink>
+            <NavLink exact activeClassName="selected" to="/bored">Bored</NavLink>
+          </li>
+          <li>
+            <NavLink exact activeClassName="selected" to="/cat">Cat</NavLink>
           </li>
           <li>
             <NavLink exact activeClassName="selected" to="/dog">Dog</NavLink>
@@ -89,7 +97,17 @@ useEffect( () => {
         <div className="content">
         <Switch>
           <Route exact path="/">
-            <Bored activity={activity} type={type} />
+            <Home 
+            logout={logout}
+            loggedIn={loggedIn}
+            setLoggedIn={setLoggedIn}
+            facade={facade}
+            setErrorMessage={setErrorMessage}
+            />
+          </Route>
+          <Route path="/bored">
+              {facade.hasUserAccess('user', loggedIn) && 
+              <Bored facade={facade} setErrorMessage={setErrorMessage} activity={activity} type={type}/>}
           </Route>
           <Route path="/cat">
             <Cat fact={fact}/>
@@ -98,7 +116,7 @@ useEffect( () => {
             <Dog message={message} />
           </Route>
           <Route path="/genderize">
-            <Genderize name={name} gender={gender} probability={probability} />
+          <Genderize/>
           </Route>
         </Switch>
         </div>

@@ -26,12 +26,13 @@ import utils.HttpUtils;
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("/info")
+@Path("info")
 public class DemoResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final UserFacade userFacade = UserFacade.getUserFacade(EMF);
+    private static String securityToken;
 
     @Context
     private UriInfo context;
@@ -39,19 +40,12 @@ public class DemoResource {
     @Context
     SecurityContext securityContext;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getInfoForAll() {
-        return "{\"msg\":\"Hello anonymous\"}";
-    }
-
     //Just to verify if the database is setup
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
     public String allUsers() {
-        //return userFacade.getAllUsers();
-        return "Hello";
+        return userFacade.getAllUsers();
     }
 
     @GET

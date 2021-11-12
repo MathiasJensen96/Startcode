@@ -1,17 +1,44 @@
-const Genderize = (props) => {
+import React, {useState, useEffect} from "react";
+
+
+function Genderize (props){
+
+  
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [probability, setProbability] = useState("");
+
+
+  const changeName = (event) => {
+    console.log(event.target.value)
+    setName(event.target.value)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    fetch(`https://api.genderize.io/?name=` + name)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setGender(data.gender)
+        setProbability(data.probability)
+      })
+  }
+
     return (
         <div>
           <h2>Genderize</h2>
-          <form>
-  <label>
-    Name:
-    <input id="nameToSearch" type="text" name="name" />
-  </label>
-  <input type="submit" value="Search" />
-</form>
-          <p>{props.name}</p>
-          <p>{props.gender}</p>
-          <p>{props.probability}</p>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Name:
+              <input type="text" name="name" value={name} onChange={changeName}/>
+            </label>
+            <button type="submit">Submit</button>
+          </form>
+          <p>{name}</p>
+          <p>{gender}</p>
+          <p>{probability}</p>
         </div>
       );
 }
